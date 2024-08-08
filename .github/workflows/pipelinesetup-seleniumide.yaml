@@ -1,4 +1,4 @@
-name: Selenium Ide CI
+name: Selenium IDE CI
 
 on:
   push: 
@@ -9,15 +9,22 @@ on:
 	- main
 jobs:
      build:
-	runs-on: ubuntu-lates
+	runs-on: ubuntu-latest
+
      steps:
-     - name: Chekout code
+     - name: Checkout code
        uses: actions/checkout@v3
 
-     - name: Set up .Net
+     - name: Set up .Net Core
        uses: actions/setup-dotnet@v3
        with:
-         dotnet-vesion: "6.0.x"
+         dotnet-vesion: '6.0.x'
+
+     - name: Install Chrome
+       run: |
+         sudo apt-get update
+         sudo apt-get install -y google-chrome-stable
+
      - name: Install dependencies
        run: dotnet restore
 
@@ -25,6 +32,8 @@ jobs:
        run: dotnet build --no-restore
 
      - name: Run tests
+       env:
+         CHROMEWEBDRIVER: /usr/bin/google-chrome
        run: dotnet tests --verbosity normal
  
 	
