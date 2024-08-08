@@ -2,38 +2,37 @@ name: Selenium IDE CI
 
 on:
   push: 
-     branches:
-	- main
+    branches:
+      - main
   pull_request:
-      branches:
-	- main
+    branches:
+      - main
+
 jobs:
-     build:
-	runs-on: ubuntu-latest
+  build:
+    runs-on: ubuntu-latest
 
-     steps:
-     - name: Checkout code
-       uses: actions/checkout@v3
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-     - name: Set up .Net Core
-       uses: actions/setup-dotnet@v3
-       with:
-         dotnet-vesion: '6.0.x'
+      - name: Set up .Net Core
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '6.0.x'
 
-     - name: Install Chrome
-       run: |
-         sudo apt-get update
-         sudo apt-get install -y google-chrome-stable
+      - name: Install Chrome
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y google-chrome-stable
 
-     - name: Install dependencies
-       run: dotnet restore
+      - name: Install dependencies
+        run: dotnet restore
 
-     - name: Build
-       run: dotnet build --no-restore
+      - name: Build
+        run: dotnet build --no-restore
 
-     - name: Run tests
-       env:
-         CHROMEWEBDRIVER: /usr/bin/google-chrome
-       run: dotnet tests --verbosity normal
- 
-	
+      - name: Run tests
+        env:
+          CHROMEWEBDRIVER: /usr/bin/google-chrome
+        run: dotnet test --verbosity normal
